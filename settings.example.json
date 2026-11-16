@@ -1,0 +1,79 @@
+{
+  "env": {
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH": "1"
+  },
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "compact",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python -B \"__HOOKS_DIR__/compaction-reread-gate.py\"",
+            "timeout": 30
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": ".*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python -B \"__HOOKS_DIR__/compaction-reread-gate.py\"",
+            "timeout": 30
+          }
+        ]
+      },
+      {
+        "matcher": "Bash|PowerShell|mcp__.+__shell",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python -B \"__HOOKS_DIR__/commit-red-witness.py\"",
+            "timeout": 300
+          },
+          {
+            "type": "command",
+            "command": "python -B \"__HOOKS_DIR__/pr-text-gate.py\"",
+            "timeout": 30
+          },
+          {
+            "type": "command",
+            "command": "python -B \"__HOOKS_DIR__/fold-cap-gate.py\"",
+            "timeout": 30
+          }
+        ]
+      },
+      {
+        "matcher": "Bash|PowerShell|mcp__.+__shell|mcp__.+__process_kill",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python -B \"__HOOKS_DIR__/kill-witness-gate.py\"",
+            "timeout": 30
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Read|mcp__.+__read|mcp__.+__read_lines",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python -B \"__HOOKS_DIR__/compaction-reread-gate.py\"",
+            "timeout": 30
+          },
+          {
+            "type": "command",
+            "command": "python -B \"__HOOKS_DIR__/pr-text-gate.py\"",
+            "timeout": 30
+          }
+        ]
+      }
+    ]
+  }
+}

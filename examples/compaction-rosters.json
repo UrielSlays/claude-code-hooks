@@ -1,0 +1,22 @@
+{
+  "rosters": {
+    "project": {
+      "label": "project reference documents",
+      "canon": "the repository contribution rules",
+      "after": "check the work since the last read and fix whatever has drifted",
+      "roots": [
+        "~/source/sample-app"
+      ],
+      "docs": [
+        "~/source/sample-app/CONTRIBUTING.md",
+        "~/source/sample-app/README.md"
+      ],
+      "feeds": [],
+      "lists": [],
+      "source_roots": [],
+      "source_parents": [],
+      "source_names": [],
+      "drive_prefixes": []
+    }
+  }
+}
